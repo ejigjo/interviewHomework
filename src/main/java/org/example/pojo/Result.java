@@ -15,14 +15,9 @@ public class Result<T> {
     private List<ExchangeRateRequest> currency;
 
     public static <E> Result<E> success(List<ExchangeRateRequest> currency){
-//        Result<E> result = new Result<>();
-//        result.setError(new Error("0000", "成功"));
-//        result.setCurrency(currency);
         return new Result<>(new Error("0000","成功"),currency);
     }
     public static Result error() {
-//        Result result = new Result<>();
-//        result.setError(new Error("E001", "日期區間不符" ));
         return new Result<>(new Error("E001","日期區間不符"),null);
     }
 }
