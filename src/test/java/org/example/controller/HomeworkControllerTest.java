@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.pojo.ExchangeRateRequest;
+import org.example.pojo.ExchangeRateResponse;
 import org.example.pojo.ForexRequest;
 import org.example.pojo.Result;
 import org.example.service.HomeworkService;
@@ -33,15 +34,15 @@ class HomeworkControllerTest {
     public void testGetHistoricalRates_Success() throws ParseException {
 
         ForexRequest forexRequest = new ForexRequest();
-        List<ExchangeRateRequest> mockHistoricalRates = new ArrayList<>();
-        mockHistoricalRates.add(new ExchangeRateRequest());
-        mockHistoricalRates.add(new ExchangeRateRequest());
+        List<ExchangeRateResponse> mockHistoricalRates = new ArrayList<>();
+        mockHistoricalRates.add(new ExchangeRateResponse());
+        mockHistoricalRates.add(new ExchangeRateResponse());
 
         //return不是為Null
         Mockito.when(homeworkService.getHistoricalRates(forexRequest)).thenReturn(mockHistoricalRates);
 
 
-        Result<List<ExchangeRateRequest>> result = homeworkController.getHistoricalRates(forexRequest);
+        Result< List<ExchangeRateResponse>> result = homeworkController.getHistoricalRates(forexRequest);
 
         //結果是否符合預期
         assertEquals("0000", result.getError().getCode());
@@ -57,7 +58,7 @@ class HomeworkControllerTest {
         //假如homeworkService.getHistoricalRates(forexRequest) return為null
         Mockito.when(homeworkService.getHistoricalRates(forexRequest)).thenReturn(null);
 
-        Result<List<ExchangeRateRequest>> result = homeworkController.getHistoricalRates(forexRequest);
+        Result< List<ExchangeRateResponse>> result = homeworkController.getHistoricalRates(forexRequest);
 
         //結果是否符合預期
         assertEquals("E001", result.getError().getCode());

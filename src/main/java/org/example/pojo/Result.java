@@ -12,9 +12,9 @@ import java.util.List;
 @Data
 public class Result<T> {
     private Error error;
-    private List<ExchangeRateRequest> currency;
+    private List<ExchangeRateResponse> currency;
 
-    public static <E> Result<E> success(List<ExchangeRateRequest> currency){
+    public static <E> Result<E> success(List<ExchangeRateResponse> currency){
         return new Result<>(new Error("0000","成功"),currency);
     }
     public static Result error() {

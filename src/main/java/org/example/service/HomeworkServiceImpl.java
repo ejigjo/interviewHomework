@@ -1,15 +1,19 @@
 package org.example.service;
 
+import com.mysql.cj.log.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.example.mapper.HomeworkMapper;
 import org.example.pojo.ExchangeRateRequest;
+import org.example.pojo.ExchangeRateResponse;
 import org.example.pojo.ForexRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Service
 public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
@@ -22,7 +26,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public List<ExchangeRateRequest> getHistoricalRates(ForexRequest forexRequest) {
+    public  List<ExchangeRateResponse> getHistoricalRates(ForexRequest forexRequest) {
         Date startDate = forexRequest.getStartDate();
         Date endDate = forexRequest.getEndDate();
 
@@ -44,8 +48,20 @@ public class HomeworkServiceImpl implements HomeworkService {
         if (startDate.before(oneYearAgo) || endDate.after(yesterday) || startDate.after(endDate)) {
             return null;
         }
+        List<ExchangeRateResponse> historicalRatesResponse = new ArrayList<>();
         List<ExchangeRateRequest> historicalRates = homeworkMapper.getHistoricalRates(forexRequest);
-        return historicalRates;
+        //判斷幣別
+        //並將判斷完成的數據返回給前端
+        if(forexRequest.getCurrency().equals("usd")) {
+            for (ExchangeRateRequest historicalRate : historicalRates) {
+                ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse();
+                exchangeRateResponse.setDate(historicalRate.getDate());
+                exchangeRateResponse.setUsdToNtd(historicalRate.getUsdToNtd());
+                historicalRatesResponse.add(exchangeRateResponse);
+            }
+        }
+
+        return historicalRatesResponse;
 
     }
 }
